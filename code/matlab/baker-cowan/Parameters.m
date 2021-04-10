@@ -3,7 +3,7 @@ classdef Parameters < matlab.mixin.SetGet
 
     properties
         % Proportinality constants
-        Alpha {mustBeNumeric}  % Rate of activity decay
+        Mu {mustBeNumeric}     % Strength of total synaptic drive
         Beta {mustBeNumeric}   % Strength of lateral connections
         
         % Firing rate
@@ -20,23 +20,21 @@ classdef Parameters < matlab.mixin.SetGet
         Xi {mustBeNumeric}     % Rate of connection strength decay
         
         % Stimulus
-        Amplitude {mustBeNumeric} % Stimulus amplitude
-        Period {mustBeNumeric}    % Stimulus period
+        H                          % Stimulus function
     end
     
     methods
         function obj = Parameters()
-           obj.Alpha = 1;
+           obj.Mu = 0.5;
            obj.Beta = 0;
            obj.Gamma = 2;
            obj.Theta = 1;
            obj.Sigma = 2;
            obj.L = [1 0; 0 1];
-           obj.D0 = 20;
+           obj.D0 = 8;
            obj.P0 = 0.95;
-           obj.Xi = 14;
-           obj.Amplitude = 0;
-           obj.Period = 80;
+           obj.Xi = 7;
+           obj.H = stimulus(1, 80);
         end
     end
 end

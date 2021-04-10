@@ -1,16 +1,17 @@
 clearvars;
 
-N = 128;
+N = 64;
 T = 500;
-viewlim = 10;
+viewlim = 5;
 
 params = Parameters();
 
 % Modify any parameters
-set(params, 'Alpha', 1);
-set(params, 'Beta', 0.1);
-set(params, 'Amplitude', 2);
-set(params, 'Period', 80);
+A = 0;
+P = 50;
+Beta = 0.8;
+set(params, 'H', stimulus(A, P));
+set(params, 'Beta', Beta);
 
 % Run simulation
 [ts, y] = runsim(N, T, params);
@@ -25,13 +26,13 @@ pattern = pdiff(y);
 
 % Visualize
 clf;
-viz = surface(X, Y, yn, 'Edgecolor', 'none');
+viz = surf(X, Y, yn, 'Edgecolor', 'none');
 colorbar;
 set(gca, 'nextplot', 'replaceChildren');
 axis tight;
 
 zlim([-viewlim, viewlim]);
-caxis([-viewlim, viewlim]);
+% caxis([-viewlim, viewlim]);
 
 %set(gca, 'Visible', 'off');
 %writer = VideoWriter('figures/anim');

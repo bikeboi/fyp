@@ -1,37 +1,40 @@
 clearvars;
 
-Nsweep = 25;
+Nsweep = 50;
 Nruns = 1;
-N = 128;
-T = 500;
-periodRange = linspace(30, 200, Nsweep);
-ampRange = linspace(0, 1.5, Nsweep);
-sigmaRange = linspace(2, 20, Nsweep);
-alphaRange = linspace(0, 1, Nsweep);
-betaRange = linspace(0, 0.1, Nsweep);
+N = 64;
+T = 1000;
+
+ampRange = linspace(0, 2, Nsweep);
+periodRange = linspace(10, 500, Nsweep);
 
 sweepvals = zeros(Nsweep,Nsweep);
-[local, lateral, coeffs, stimulus] = default_params();
 
 for i = 1:Nsweep
-    disp(i);
+    fprintf("%i:\n",i);
     for j = 1:Nsweep
-        coeffs(1) = alphaRange(i);
-        coeffs(2) = betaRange(j);
+        fprintf(" %i\r",j);
+        params = Parameters();
+        beta = 0.8;
+        A = ampRange(i);
+        P = periodRange(j);
+        set(params, 'H', stimulus(A, P))
+        set(params, 'Beta', beta);
     
         runavg = zeros(Nruns,1);
         for k = 1:Nruns
-            [~, u] = runsim(N, T, local, lateral, coeffs, stimulus);
+            [~, u] = runsim(N, T, params);
             % u = firingrate(u,2,1);
             runavg(k) = pdiff(u);
         end
         sweepvals(i,j) = mean(runavg);
     end
+    fprintf('\n');
 end
 
 clf;
-surf(betaRange, alphaRange, sweepvals);
+surf(periodRange, ampRange, sweepvals);
 colorbar;
-xlabel("$\beta$", "FontSize", 25);
-ylabel("$\alpha$", "FontSize", 25);
+xlabel("Period", "FontSize", 25);
+ylabel("Amplitude", "FontSize", 25);
 axis tight;

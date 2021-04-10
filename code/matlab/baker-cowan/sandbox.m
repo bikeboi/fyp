@@ -2,26 +2,39 @@ clearvars;
 
 params = Parameters();
 
-N = 128;
-d0 = params.D0*2;
-n = sqrt(2);
-d = d0/n;
-xi = params.Xi;
-L = [1, 0; 0, 1];
+N = 64;
+T = 1000;
+Amp = 1;
+Beta = 1.0;
+Nruns = 5;
+Nspan = 50;
+results = zeros(Nruns, Nspan);
 
-% Generate field coordinates
-[x, y] = meshgrid(linspace(-N/2, N/2, N));
-R = [x(:), y(:)];
-Latt = R * L;
-LattX = Latt(:,1);
-LattY = Latt(:,2);
-D = reshape(sin(LattX) + cos(LattY), N, N);
+Pstart = 12;
+Pend = 250;
 
-% Featuremap
-P = reshape(featuremap(R, L, d), N, N);
-PD = P .* (1 + D);
+set(params, 'Beta', Beta);
+
+for i = 1:Nruns
+    [ps, rs] = periodsweep(Pstart, Pend, Nspan, 64, T, Amp, params);
+    results(i,:) = rs;
+    fprintf("Run:%i\n",i);
+end
+
+meanLine = mean(results,1);
+errsMax = max(results, [], 1) - meanLine;
+errsMin = meanLine - min(results, [], 1);
 
 clf;
-surface(x, y, PD, 'Edgecolor', 'none');
-axis tight;
-colorbar;
+errorbar(ps, meanLine, errsMax, errsMin,...
+    'Color', '#EDB120', 'MarkerEdgeColor', 'none');
+hold on;
+for i = 1:Nruns
+   scatter(ps, results(i,:), 30, [0 0.4470 0.7410], 'filled');
+   hold on;
+end
+
+% Save data
+name = sprintf('data/period_sweep_%i-%i_T=%i_Amp=%i_Beta=%.1e.mat', Pstart, Pend, T, Amp, Beta);
+fprintf("Saving as: %s \n", name);
+save(name, 'ps', 'results');

@@ -1,9 +1,7 @@
-function [t, u] = runsim(N, T, params)
+function [t, u, H] = runsim(N, T, params)
 
 % Stimulus
-A = params.Amplitude;
-P = params.Period;
-H = @(t) A*heavisidestep(sin((2*pi*t)/P));
+H = params.H;
 
 % Connectivity
 % -- Local
@@ -16,7 +14,7 @@ H = @(t) A*heavisidestep(sin((2*pi*t)/P));
 f = @(t,y) dynamics(...
     t,y,...
     Wloc, Wlat,...
-    params.Alpha, params.Beta,...
+    params.Mu, params.Beta,...
     params.Gamma, params.Theta)...
     + H(t);
 
