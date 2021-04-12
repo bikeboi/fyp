@@ -1,16 +1,16 @@
 clearvars;
 
-N = 64;
+N = 128;
 T = 500;
 viewlim = 5;
 
 params = Parameters();
 
 % Modify any parameters
-A = 0;
-P = 50;
+A = 1;
+P = 100;
 Beta = 0.8;
-set(params, 'H', stimulus(A, P));
+set(params, 'H', stimulus(A,P));
 set(params, 'Beta', Beta);
 
 % Run simulation
