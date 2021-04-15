@@ -1,38 +1,39 @@
 clearvars;
 
 Nsamples = 20;
-N = 64;
+N = 128;
 T = 1000;
 params = Parameters();
 A = 1;
-P = 80;
-Beta = 0;
+P = 100;
+Beta = 0.0;
 set(params, 'H', stimulus(A,P));
 set(params, 'Beta', Beta);
 
 % Generate samples
-fprintf("A=%i, P=%i, Beta=%.2f\n", A, P, Beta);
-samples = getSamples(Nsamples, N, T, params);
+fprintf("A=%.1f, P=%i, Beta=%.1f\n", A, P, Beta);
+samples = generatesamples(Nsamples, N, T, params);
 
-% Most common sample
+% Closest to all
 sample_mean = mean(samples, 1);
-ds = mean(abs(samples - sample_mean), [2,3]);
-[~,k] = min(ds,[],1,'linear');
+V = mean(samples - sample_mean, 1);
 
-% Inter-sample distance
-variance = mean(ds);
-
-%Viz
-clf;
-surface(squeeze(samples(k,:,:)), 'Edgecolor', 'none');
-axis tight;
-title('Blah', sprintf('$\sigma=%.2f$
-
-%{
-for i = 1:Nsamples
-   subplot(2, Nsamples/2, i);
-   surface(squeeze(samples(i,:,:)), 'Edgecolor', 'none');
-   axis tight;
-   set(gca, 'visible', 'off');
+closest_sample = zeros(N,N);
+closest = fill;
+for i = 1:size(samples,1)
+   sample = samples(i,:,:);
 end
-%}
+
+sample = squeeze(samples(1,:,:));
+
+% Viz
+clf;
+subplot(1,2,1);
+surface(squeeze(V), 'Edgecolor', 'none');
+subplot(1,2,2);
+
+caxis([-5, 5]);
+title("A=1, P=100, $\beta=0$", 'FontSize', 40);
+xticklabels([]);
+yticklabels([]);
+axis tight;
