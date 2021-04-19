@@ -1,16 +1,16 @@
 clearvars;
 
 N = 128;
-T = 250;
+T = 1000;
 viewlim = 5;
 
 params = Parameters();
 
 % Modify any parameters
-A = 1.5;
-P = 150;
-Beta = 0.8;
-L = [1, 0; -1/2, 1/(2*sqrt(3))];
+A = 0.7;
+P = 100;
+Beta = 0.0;
+L = [1, 0; 0, 1];
 set(params, 'H', stimulus(A,P));
 set(params, 'Beta', Beta);
 set(params, 'L', L);
@@ -34,7 +34,7 @@ set(gca, 'nextplot', 'replaceChildren');
 axis tight;
 
 zlim([-viewlim, viewlim]);
-caxis([-viewlim, viewlim]);
+caxis([-1, 1]);
 
 %set(gca, 'Visible', 'off');
 %writer = VideoWriter('figures/anim');

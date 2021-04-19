@@ -1,41 +1,51 @@
-%{
 clearvars;
 
-Nsamples = 5;
-N = 128;
-T = 1000;
-params = Parameters();
-A = 0;
-P = 100;
-Beta = 0.8;
-set(params, 'H', stimulus(A,P));
-set(params, 'Beta', Beta);
-
-% Generate samples
-fprintf("A=%.1f, P=%i, Beta=%.1f\n", A, P, Beta);
-samples = generatesamples(Nsamples, N, T, params);
-
-% Closest to all
-sample_mean = mean(samples, 1);
-closest_sample = zeros(N,N);
-closest = ones(N,N)*inf;
-for i = 1:size(samples,1)
-   sample = samples(i,:,:);
-   D = mean(sample - sample_mean, 'all');
-   if D < closest
-       closest_sample = sample;
-       closest = D;
-   end
-end
-%}
-sample = samples(5,:,:);
-
-% Viz
-% Plot closest sample
 clf;
-surface(squeeze(sample), 'Edgecolor', 'none');
-caxis([-3, 3]);
-%title(sprintf("A=%.1f, P=%i, $\\beta=%.1f$", A, P, Beta), 'FontSize', 40);
+tlo = tiledlayout(2,2,'TileSpacing','compact', 'Padding', 'compact');
+
+% Figure options
+fs = 15;
+ts = 30;
+
+load('data/period_v_amp_P=10-500_A=0-2_T=1000_beta=0.mat');
+
+t(1) = nexttile(tlo);
+surface(t(1), periodRange, ampRange, sweepvals, 'Edgecolor', 'none');
+axis tight;
+caxis([0 7000]);
+set(gca, 'FontSize', fs);
+xticklabels([]);
+title(t(1), '$\beta = 0.0$', 'FontSize', ts);
+
+load('data/period_v_amp_P=10-500_A=0-2_T=1000_beta=0_2.mat');
+
+t(2) = nexttile(tlo);
+surface(t(2), periodRange, ampRange, sweepvals, 'Edgecolor', 'none');
+axis tight;
+caxis([0 7000]);
+set(gca, 'FontSize', fs);
 xticklabels([]);
 yticklabels([]);
+title(t(2), '$\beta = 0.2$', 'FontSize', ts);
+
+load('data/period_v_amp_P=10-500_A=0-2_T=1000_beta=0_4.mat');
+
+t(3) = nexttile(tlo);
+surface(t(3), periodRange, ampRange, sweepvals, 'Edgecolor', 'none');
 axis tight;
+caxis([0 7000]);
+set(gca, 'FontSize', fs);
+title(t(3), '$\beta = 0.4$', 'FontSize', ts);
+
+load('data/period_v_amp_P=10-500_A=0-2_T=1000_beta=0_8.mat');
+
+t(4) = nexttile(tlo);
+surface(t(4), periodRange, ampRange, sweepvals, 'Edgecolor', 'none');
+axis tight;
+caxis([0 7000]);
+set(gca, 'FontSize', fs);
+yticklabels([]);
+title(t(4), '$\beta = 0.8$', 'FontSize', ts);
+
+cbh = colorbar(t(end));
+cbh.Layout.Tile = 'north';
