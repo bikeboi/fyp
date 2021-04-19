@@ -7,9 +7,9 @@ viewlim = 5;
 params = Parameters();
 
 % Modify any parameters
-A = 0.7;
-P = 100;
-Beta = 0.0;
+A = 0.5;
+P = 200;
+Beta = 0.4;
 L = [1, 0; 0, 1];
 set(params, 'H', stimulus(A,P));
 set(params, 'Beta', Beta);
@@ -34,7 +34,7 @@ set(gca, 'nextplot', 'replaceChildren');
 axis tight;
 
 zlim([-viewlim, viewlim]);
-caxis([-1, 1]);
+caxis([-viewlim, viewlim]);
 
 %set(gca, 'Visible', 'off');
 %writer = VideoWriter('figures/anim');
@@ -47,7 +47,7 @@ for i = 1:length(ts)
     viz.CData = yt;
     title(sprintf("t = %.2f / %i [ms]", t, T));
     drawnow;
-    pause(0.001);
+    pause(0.00001);
     %writeVideo(writer, getframe);
 end
 
