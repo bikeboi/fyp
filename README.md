@@ -1,3 +1,3 @@
-Final year project backups
+# Modelling Stroboscopically-induced visual hallucinations
 
-In case everything explodes
+> Undergrad final year project code
